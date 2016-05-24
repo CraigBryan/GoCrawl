@@ -58,14 +58,16 @@ func RunDownloaders(
 }
 
 func main() {
+    // Number of downloading/item processing threads
     workers := 10
     
+    // Figure out why this deadlocks with more reasonable buffer sizes
     resultChan := make(chan CrawlResult, 500)
     respChan := make(chan *goreq.Response, 500)
     
     Downloaders[0] = SimpleDownloader{}
     // Downloaders[1] = RateLimiter{}
-    
+
     for i := 0; i < workers; i++ {
         go RunDownloaders(resultChan, respChan)
     }
